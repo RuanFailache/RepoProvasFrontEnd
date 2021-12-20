@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { useState, useMemo } from 'react'
 
-function App() {
+import Exams from './components/exams/Exams'
+import Home from './components/home/Home'
+import ExamContext from './contexts/ExamContext'
+import NewExam from './components/exams/NewExam'
+
+const App = () => {
+  const [examFilter, setExamFilter] = useState('teacher')
+
+  const examState = useMemo(() => ({
+    examFilter,
+    setExamFilter
+  }), [examFilter])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <BrowserRouter>
+      <ExamContext.Provider value={examState}>
+        <Routes>
+          <Route index element={<Home />} />
+          <Route path="/exams" element={<Exams />} />
+          <Route path="/exams/register" element={<NewExam />} />
+        </Routes>
+      </ExamContext.Provider>
+    </BrowserRouter>
+  )
 }
 
-export default App;
+export default App
